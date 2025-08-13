@@ -48,4 +48,152 @@
       font-size: 1.1rem;
       margin: 10px;
       border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.
+      border: 1px solid rgba(255,255,255,.35);
+      background: rgba(0,0,0,.35);
+      color: #fff;
+      outline: none;
+    }
+    button {
+      padding: 12px 18px;
+      font-size: 1.1rem;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.35);
+      background: rgba(0,0,0,.35);
+      color: #fff;
+    }
+    #status.small.ok  { color: var(--ok);  }
+    #status.small.err { color: var(--err); }
+
+    /* Transition overlay */
+    #transitionOverlay {
+      position: fixed; inset: 0; display: none; place-items: center;
+      background: #000; z-index: 9999;
+    }
+    #transitionOverlay.show { display: grid; }
+    #transitionVideo { width: 100%; height: 100%; object-fit: cover; }
+
+    /* AFTER unlock background */
+    body.unlocked {
+      background: url('/assets/bg-unlocked.jpg') center/cover no-repeat fixed !important;
+    }
+
+    /* Embed frame wrapper */
+    .slides-wrap { width: min(70%, 900px); margin: 0 auto; }
+    .box16x9 {
+      position: relative; width: 100%; height: 0; padding-top: 56.25%;
+      box-shadow: 0 2px 8px rgba(63,69,81,.16);
+      margin-top: 1.6em; margin-bottom: .9em;
+      overflow: hidden; border-radius: 8px;
+    }
+    .box16x9 iframe {
+      position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none;
+    }
+    a { color: #ffd9e6; }
+  </style>
+</head>
+<body>
+
+  <!-- Transition Video Overlay -->
+  <div id="transitionOverlay" aria-hidden="true">
+    <video
+      id="transitionVideo"
+      src="https://packaged-media.redd.it/479xf7sy9sq61/pb/m2-res_720p.mp4?m=DASHPlaylist.mpd&v=1&e=1755054000&s=e96ca2698dd928657ed2d7ee3844f53ae3e3e5f7"
+      muted
+      playsinline>
+    </video>
+  </div>
+
+  <!-- LOCK SCREEN -->
+  <div id="lockscreen" class="active">
+    <h1>The Last Great Vampire Dynasty</h1>
+    <p class="hint">enter the place holder passcode</p>
+
+    <label for="password" class="sr-only" style="position:absolute;left:-9999px;">Password</label>
+    <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
+    <br />
+    <button type="button" onclick="checkPassword()">Unlock</button>
+    <p id="status" class="small" aria-live="polite"></p>
+  </div>
+
+  <!-- UNLOCKED CONTENT -->
+  <div id="unlocked">
+    <h2>Welcome to the Tayrealm! Your first task is to understand the backstory</h2>
+    <div class="slides-wrap">
+      <div class="box16x9">
+        <iframe
+          loading="lazy"
+          src="https://www.canva.com/design/DAGuHs8c3jA/L3A_EfQsp1aPa1Usk2G_Vg/view?embed"
+          allowfullscreen="allowfullscreen" allow="fullscreen">
+        </iframe>
+      </div>
+      <p>
+        <a href="https://www.canva.com/design/DAGuHs8c3jA/L3A_EfQsp1aPa1Usk2G_Vg/view?utm_content=DAGuHs8c3jA&utm_campaign=designshare&utm_medium=embeds&utm_source=link"
+           target="_blank" rel="noopener">
+          Copy of The Last Great Vampire Dynasty (open in Canva)
+        </a>
+      </p>
+      <!-- (Optional) If you upload a PPTX file to the repo root as vampire-dynasty.pptx, add a download link:
+      <p><a href="/vampire-dynasty.pptx" download>Download the PowerPoint (.pptx)</a></p>
+      -->
+    </div>
+  </div>
+
+  <script>
+    // --- Transition helper ---
+    function playTransition(callback) {
+      const overlay = document.getElementById('transitionOverlay');
+      const video   = document.getElementById('transitionVideo');
+
+      overlay.classList.add('show');
+      let done = false;
+
+      function finish() {
+        if (done) return;
+        done = true;
+        overlay.classList.remove('show');
+        try { video.pause(); video.currentTime = 0; } catch (e) {}
+        if (typeof callback === 'function') callback();
+      }
+
+      video.onplay  = () => setTimeout(finish, 3000);
+      video.onerror = () => finish();
+      video.onended = () => finish();
+
+      video.play().catch(() => setTimeout(finish, 700));
+    }
+
+    // --- Password gate ---
+    const CORRECT = 'woodvale'; // change if you want a different real password
+
+    // Global so the inline onclick can find it
+    window.checkPassword = function () {
+      const input  = document.getElementById('password');
+      const status = document.getElementById('status');
+      if (!input || !status) return;
+
+      const pass = (input.value || '').trim().toLowerCase();
+
+      if (pass === CORRECT) {
+        status.textContent = 'Unlocking…';
+        status.className = 'small ok';
+        playTransition(() => {
+          document.body.classList.add('unlocked');
+          document.getElementById('lockscreen').classList.remove('active');
+          document.getElementById('unlocked').classList.add('active');
+          status.textContent = '';
+        });
+      } else if (pass === 'folklore') {
+        status.textContent = '❌ Incorrect… but really close 😉';
+        status.className = 'small err';
+      } else {
+        status.textContent = '❌ Incorrect password.';
+        status.className = 'small err';
+      }
+    };
+  </script>
+</body>
+</html>
+
+    
