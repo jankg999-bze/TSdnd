@@ -5,16 +5,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Last Great Vampire Dynasty</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Fondamento&display=swap" rel="stylesheet" />
+
   <style>
     :root { --ok:#b6f7c1; --err:#ffaea8; }
-    * { box-sizing: border-box }
-    html, body { height: 100% }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+
     body {
-      margin: 0; color: #fff; text-align: center;
+      margin: 0;
+      color: #fff;
+      text-align: center;
       font: 18px/1.55 'Fondamento', cursive;
-      background: #000; /* set a base color; your unlock CSS will swap this */
-      background-size: cover;
+
+      /* BEFORE unlock */
+      background: url('/assets/bg-locked.jpg') center/cover no-repeat fixed;
     }
 
     /* show/hide sections */
@@ -22,132 +28,24 @@
     #lockscreen.active, #unlocked.active { display: block; }
 
     /* Headings + hint style */
-    h1 { margin: .25em 0 .25em; font-size: 3rem; letter-spacing: 1px; text-shadow: 2px 2px 8px rgba(0,0,0,.6); }
-    .hint { font-size: 1.1rem; font-style: italic; text-shadow: 1px 1px 6px rgba(0,0,0,.55); margin: 0 0 .5em; opacity: .95; }
+    h1 {
+      margin: .25em 0 .25em;
+      font-size: 3rem;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,.6);
+    }
+    .hint {
+      font-size: 1.1rem;
+      font-style: italic;
+      text-shadow: 1px 1px 6px rgba(0,0,0,.55);
+      margin: 0 0 .5em;
+      opacity: .95;
+    }
 
     /* Inputs */
-    input[type="password"]{
-      padding: 12px 14px; font-size: 1.1rem; margin: 10px;
-      border-radius: 12px; border: 1px solid rgba(255,255,255,.35);
-      background: rgba(0,0,0,.35); color: #fff; outline: none;
-    }
-    button{
-      padding: 12px 18px; font-size: 1.1rem; margin-top: 10px; cursor: pointer;
-      border-radius: 12px; border: 1px solid rgba(255,255,255,.35);
-      background: rgba(0,0,0,.35); color: #fff;
-    }
-    #status.small.ok { color: var(--ok) }
-    #status.small.err { color: var(--err) }
-
-    /* Transition overlay */
-    #transitionOverlay {
-      position: fixed; inset: 0; display: none; place-items: center;
-      background: #000; z-index: 9999;
-    }
-    #transitionOverlay.show { display: grid; }
-    #transitionVideo { width: 100%; height: 100%; object-fit: cover; }
-
-    /* After unlock, you can swap background via class */
-    body.unlocked {
-      /* replace this with your image/video data URI if you like */
-      background: #121212;
-      background-size: cover !important;
-    }
-
-    /* Slides/iframe wrapper */
-    .slides-wrap { width: min(70%, 900px); margin: 0 auto; }
-    .box16x9 { position: relative; width: 100%; height: 0; padding-top: 56.25%; box-shadow: 0 2px 8px rgba(63,69,81,.16); margin-top: 1.6em; margin-bottom: .9em; overflow: hidden; border-radius: 8px; }
-    .box16x9 iframe { position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; }
-  </style>
-</head>
-<body>
-
-  <!-- Transition Video Overlay -->
-  <div id="transitionOverlay">
-    <video id="transitionVideo" src="https://packaged-media.redd.it/479xf7Sy95q61/pb/m2-res_720p.mp4?m=DASHPlaylist.mpd" muted></video>
-  </div>
-
-  <!-- LOCK SCREEN -->
-  <div id="lockscreen" class="active">
-    <h1>The Last Great Vampire Dynasty</h1>
-    <p class="hint">enter the place holder passcode</p>
-
-    <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
-    <br />
-    <button onclick="checkPassword()">Unlock</button>
-    <p id="status" class="small"></p>
-  </div>
-
-  <!-- UNLOCKED CONTENT -->
-  <div id="unlocked">
-    <h2>Welcome to the Tayrealm! Your first task is to understand the backstory</h2>
-    <div class="slides-wrap">
-      <div class="box16x9">
-        <!-- Replace this with your own embed if you have one -->
-        <iframe loading="lazy"
-          src="https://www.canva.com/design/DAuGHs8c3jA/L3A_EFQsp1aPa1Usk2_Vg/view?embed"
-          allowfullscreen="allowfullscreen"></iframe>
-      </div>
-    </div>
-    <p class="small">Enjoy your quest…</p>
-  </div>
-
-  <script>
-  // --- Transition helper ---
-  function playTransition(callback) {
-    const overlay = document.getElementById('transitionOverlay');
-    const video   = document.getElementById('transitionVideo');
-
-    // show overlay
-    overlay.classList.add('show');
-    let done = false;
-
-    function finish() {
-      if (done) return;
-      done = true;
-      overlay.classList.remove('show');
-      try { video.pause(); video.currentTime = 0; } catch (e) {}
-      if (typeof callback === 'function') callback();
-    }
-
-    // fallbacks to ensure it always finishes
-    video.onplay  = () => setTimeout(finish, 3000);
-    video.onerror = () => finish();
-    video.onended = () => finish();
-
-    // try to play; if blocked, still finish
-    video.play().catch(() => setTimeout(finish, 700));
-  }
-
-  // --- Password gate ---
-  // real answer (change this if you want a different correct one)
-  const CORRECT = 'woodvale';
-
-  // Make the function global so the inline onclick finds it
-  window.checkPassword = function () {
-    const input  = document.getElementById('password');
-    const status = document.getElementById('status');
-    if (!input || !status) return;
-
-    const pass = (input.value || '').trim().toLowerCase();
-
-    if (pass === CORRECT) {
-      status.textContent = 'Unlocking…';
-      status.className = 'small ok';
-      playTransition(() => {
-        document.body.classList.add('unlocked');
-        document.getElementById('lockscreen').classList.remove('active');
-        document.getElementById('unlocked').classList.add('active');
-        status.textContent = '';
-      });
-    } else if (pass === 'folklore') {
-      status.textContent = '❌ Incorrect… but really close 😉';
-      status.className = 'small err';
-    } else {
-      status.textContent = '❌ Incorrect password.';
-      status.className = 'small err';
-    }
-  };
-  </script>
-</body>
-</html>
+    input[type="password"] {
+      padding: 12px 14px;
+      font-size: 1.1rem;
+      margin: 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.
