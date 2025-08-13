@@ -130,53 +130,55 @@ function playTransition(callback) {{
   video.play().catch(function() {{ setTimeout(finish, 700); }});
 }}
 
-function checkPassword() {{
-  const pass = document.getElementById('password').value.trim().toLowerCase();
+<script>
+function playTransition(callback) {
+  const overlay = document.getElementById('transitionOverlay');
+  const video = document.getElementById('transitionVideo');
+  overlay.classList.add('show');
+  let done = false;
+
+  function finish() {
+    if (done) return;
+    done = true;
+    overlay.classList.remove('show');
+    video.pause();
+    try { video.currentTime = 0; } catch(e){}
+    if (typeof callback === 'function') callback();
+  }
+
+  video.onplay = function () { setTimeout(finish, 3000); };
+  video.onerror = function () { finish(); };
+  video.onended = function () { finish(); };
+
+  video.play().catch(function() { setTimeout(finish, 700); });
+}
+
+function checkPassword() {
+  const pass   = document.getElementById('password').value.trim().toLowerCase();
   const status = document.getElementById('status');
-  if (pass === 'woodvale') {{
+
+  if (pass === 'woodvale') {
     status.textContent = 'Unlocking…';
-    playTransition(function() {{
+    status.className = 'small ok';
+    playTransition(function () {
       document.body.classList.add('unlocked');
       document.getElementById('lockscreen').classList.remove('active');
       document.getElementById('unlocked').classList.add('active');
       status.textContent = '';
-    }});
-  }} else {{
-    status.textContent = 'Incorrect password.';
+    });
+  } else if (pass === 'folklore') {
+    status.textContent = '❌ Incorrect… but really close 😉';
     status.className = 'small err';
-  }}
-}}
+  } else {
+    status.textContent = '❌ Incorrect password.';
+    status.className = 'small err';
+  }
+}
 </script>
 
-<script>
-  // change this if you actually have a real correct password
-  const CORRECT_PASSWORD = "evermore"; // example only
 
-  // wire up your form
-  const form = document.querySelector("#pw-form");
-  const input = document.querySelector("#pw-input");
-  const msg = document.querySelector("#pw-message");
 
-  form?.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const val = (input.value || "").trim().toLowerCase();
 
-    if (val === CORRECT_PASSWORD.toLowerCase()) {
-      msg.textContent = "✅ correct!";
-      // do your success action here (unhide content, redirect, etc.)
-      // document.querySelector("#secret").style.display = "block";
-    } else if (val === "folklore") {
-      msg.textContent = "❌ incorrect… but really close 😉";
-    } else {
-      msg.textContent = "❌ incorrect password";
-    }
-  });
-</script>
-<form id="pw-form">
-  <input id="pw-input" type="password" placeholder="Password" />
-  <button type="submit">Enter</button>
-</form>
-<p id="pw-message" aria-live="polite"></p>
 
   
 
