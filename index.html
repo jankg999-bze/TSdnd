@@ -185,10 +185,10 @@
           status.textContent = '';
         });
       } else if (pass === 'folklore') {
-        status.textContent = '❌ Incorrect… but really close 😉';
+        status.innerHTML = '<span style="color:red;">❌</span> Incorrect… but really close 😉';
         status.className = 'small err';
       } else {
-        status.textContent = '❌ Incorrect password.';
+        status.innerHTML = '<span style="color:red;">❌</span> Incorrect password.';
         status.className = 'small err';
       }
     };
