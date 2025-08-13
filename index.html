@@ -148,5 +148,37 @@ function checkPassword() {{
 }}
 </script>
 
+<script>
+  // change this if you actually have a real correct password
+  const CORRECT_PASSWORD = "evermore"; // example only
+
+  // wire up your form
+  const form = document.querySelector("#pw-form");
+  const input = document.querySelector("#pw-input");
+  const msg = document.querySelector("#pw-message");
+
+  form?.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const val = (input.value || "").trim().toLowerCase();
+
+    if (val === CORRECT_PASSWORD.toLowerCase()) {
+      msg.textContent = "✅ correct!";
+      // do your success action here (unhide content, redirect, etc.)
+      // document.querySelector("#secret").style.display = "block";
+    } else if (val === "folklore") {
+      msg.textContent = "❌ incorrect… but really close 😉";
+    } else {
+      msg.textContent = "❌ incorrect password";
+    }
+  });
+</script>
+<form id="pw-form">
+  <input id="pw-input" type="password" placeholder="Password" />
+  <button type="submit">Enter</button>
+</form>
+<p id="pw-message" aria-live="polite"></p>
+
+  
+
 </body>
 </html>
