@@ -130,67 +130,23 @@ function playTransition(callback) {{
   video.play().catch(function() {{ setTimeout(finish, 700); }});
 }}
 
-<script>
-function playTransition(callback) {
-  const overlay = document.getElementById('transitionOverlay');
-  const video = document.getElementById('transitionVideo');
-  overlay.classList.add('show');
-  let done = false;
-
-  function finish() {
-    if (done) return;
-    done = true;
-    overlay.classList.remove('show');
-    video.pause();
-    try { video.currentTime = 0; } catch(e){}
-    if (typeof callback === 'function') callback();
-  }
-
-  video.onplay = function () { setTimeout(finish, 3000); };
-  video.onerror = function () { finish(); };
-  video.onended = function () { finish(); };
-
-  video.play().catch(function() { setTimeout(finish, 700); });
-}
-
-<script>
-window.checkPassword = function () {
-  const input  = document.getElementById('password');
+function checkPassword() {{
+  const pass = document.getElementById('password').value.trim().toLowerCase();
   const status = document.getElementById('status');
-
-  // Guard: make sure elements exist
-  if (!input || !status) {
-    console.error('Missing #password or #status element.');
-    return;
-  }
-
-  const pass = (input.value || '').trim().toLowerCase();
-  console.log('Entered password:', pass); // temp debug
-
-  if (pass === 'woodvale') {
+  if (pass === 'woodvale') {{
     status.textContent = 'Unlocking…';
-    status.className = 'small ok';
-    playTransition(function () {
+    playTransition(function() {{
       document.body.classList.add('unlocked');
       document.getElementById('lockscreen').classList.remove('active');
       document.getElementById('unlocked').classList.add('active');
       status.textContent = '';
-    });
-  } else if (pass === 'folklore') {
-    status.textContent = '❌ Incorrect… but really close 😉';
+    }});
+  }} else {{
+    status.textContent = 'Incorrect password.';
     status.className = 'small err';
-  } else {
-    status.textContent = '❌ Incorrect password.';
-    status.className = 'small err';
-  }
-};
+  }}
+}}
 </script>
-
-
-
-
-
-  
 
 </body>
 </html>
