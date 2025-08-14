@@ -1,68 +1,116 @@
 
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Next Chapter</title>
-    <style>
-        body {
-            background-color: black;
-            color: white;
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
-        .door {
-            max-width: 300px;
-            margin-top: 20px;
-        }
-        .password-box {
-            margin-top: 20px;
-        }
-        input {
-            padding: 10px;
-            font-size: 16px;
-        }
-        button {
-            padding: 10px;
-            font-size: 16px;
-            background-color: orange;
-            border: none;
-            cursor: pointer;
-        }
-        #status {
-            margin-top: 10px;
-            font-size: 14px;
-            color: red;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <title>Next Chapter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      overflow-x: hidden;
+    }
+    h2 { margin: 24px 12px 8px; }
+    .door {
+      max-width: 320px;
+      width: 90%;
+      margin: 16px auto 8px;
+      display: block;
+      transition: transform 2s ease-in-out;
+    }
+    .door.up {
+      transform: translateY(-120vh); /* Moves the door way up */
+    }
+    .password-box { margin: 16px 0 8px; }
+    input[type="text"] {
+      padding: 10px 12px; font-size: 16px; border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.35); background: rgba(0,0,0,.35);
+      color: #fff; outline: none; width: 260px; max-width: 80%;
+    }
+    button {
+      padding: 10px 16px; font-size: 16px; margin-left: 8px; cursor: pointer;
+      border-radius: 8px; border: 1px solid rgba(255,255,255,.35);
+      background: rgba(255,165,0,.25); color: #fff;
+    }
+    #status { margin: 10px 0 0; font-size: 14px; min-height: 1.2em; }
+    #status.err { color: #ff4d4d; }
+    #status.ok  { color: #9cff9c; }
+    .hidden { display: none; }
+
+    /* Embed styling */
+    .slides-wrap { width: min(900px, 90%); margin: 24px auto 40px; }
+    .box16x9 {
+      position: relative; width: 100%; height: 0; padding-top: 56.25%;
+      box-shadow: 0 2px 8px rgba(63,69,81,.16);
+      margin-top: 1.0em; overflow: hidden; border-radius: 8px;
+    }
+    .box16x9 iframe {
+      position: absolute; inset: 0; width: 100%; height: 100%; border: none;
+    }
+    a { color: #ffd9e6; }
+  </style>
 </head>
 <body>
 
-    <h2>Wouldn't you like to know what on...</h2>
-    <img src="door.jpg" alt="Door" class="door">
+  <h2>Wouldn't you like to know what on...</h2>
+  <img src="door.jpg" alt="Door" class="door" id="door">
 
-    <div class="password-box">
-        <input type="text" id="password" placeholder="Enter password">
-        <button onclick="checkPassword()">Submit</button>
-        <div id="status"></div>
+  <div class="password-box">
+    <input type="text" id="password" placeholder="Enter password">
+    <button type="button" onclick="checkPassword()">Submit</button>
+    <div id="status" aria-live="polite"></div>
+  </div>
+
+  <!-- Hidden until password is correct -->
+  <div id="content" class="hidden">
+    <div class="slides-wrap">
+      <div class="box16x9">
+        <iframe
+          loading="lazy"
+          src="https://www.canva.com/design/DAGuLLVkNns/gcYJILv0zqP6JQxA5EKPZA/view?embed"
+          allowfullscreen="allowfullscreen" allow="fullscreen">
+        </iframe>
+      </div>
+      <p>
+        <a href="https://www.canva.com/design/DAGuLLVkNns/gcYJILv0zqP6JQxA5EKPZA/view?utm_content=DAGuLLVkNns&utm_campaign=designshare&utm_medium=embeds&utm_source=link"
+           target="_blank" rel="noopener">
+          Character creation (open in Canva)
+        </a>
+      </p>
     </div>
+  </div>
 
-    <script>
-        function checkPassword() {
-            const pass = document.getElementById('password').value.trim().toLowerCase();
-            const status = document.getElementById('status');
+  <script>
+    function checkPassword() {
+      const input  = document.getElementById('password');
+      const status = document.getElementById('status');
+      const content = document.getElementById('content');
+      const doorImg = document.getElementById('door');
+      const val = (input.value || '').trim().toLowerCase();
 
-            if (pass === 'the other side of the door') {
-                status.style.color = 'lime';
-                status.textContent = '✔ Correct! Unlocking...';
-                // Here you can redirect or reveal content
-                // window.location.href = 'nextpage.html';
-            } else {
-                status.style.color = 'red';
-                status.textContent = '❌ Incorrect password.';
-            }
-        }
-    </script>
+      if (val === 'the other side of the door') {
+        status.className = 'ok';
+        status.textContent = '✔ Correct! Unlocking...';
+
+        // Animate door up
+        doorImg.classList.add('up');
+
+        // Show content after animation
+        setTimeout(() => {
+          content.classList.remove('hidden');
+          content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 2000);
+      } else {
+        status.className = 'err';
+        status.innerHTML = '<span style="color:#ff0000;">❌</span> Incorrect password.';
+      }
+    }
+  </script>
 
 </body>
 </html>
+
