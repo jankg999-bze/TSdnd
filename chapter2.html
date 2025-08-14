@@ -41,6 +41,11 @@
     #status.ok  { color: #9cff9c; }
     .hidden { display: none; }
 
+    /* step two: background swaps in after unlock */
+        body.unlocked {
+            background: url('cabin.png') center/cover no-repeat fixed;
+            transition: background 300ms ease-in;
+
     /* Embed styling */
     .slides-wrap { width: min(900px, 90%); margin: 24px auto 40px; }
     .box16x9 {
@@ -80,13 +85,7 @@
            target="_blank" rel="noopener">
           Character creation (open in Canva)
         </a>
-        /* background swaps in after unlock */
-body.unlocked {
-  background: url('/cabin.jpg') center/cover no-repeat fixed;
-  transition: background 300ms ease-in; /* small fade-in */
-}
-
-      </p>
+        </p>
     </div>
   </div>
 
