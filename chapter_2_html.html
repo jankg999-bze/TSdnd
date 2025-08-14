@@ -1,0 +1,79 @@
+Got it ✅ — here’s the updated **chapter2.html** with the password set to `"the other side of the door"` instead of `"the other side of the"`.  
+
+---
+
+### **chapter2.html**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Next Chapter</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .door {
+            max-width: 300px;
+            margin-top: 20px;
+        }
+        .password-box {
+            margin-top: 20px;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: orange;
+            border: none;
+            cursor: pointer;
+        }
+        #status {
+            margin-top: 10px;
+            font-size: 14px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Wouldn't you like to know what on...</h2>
+    <img src="door.jpg" alt="Door" class="door">
+
+    <div class="password-box">
+        <input type="text" id="password" placeholder="Enter password">
+        <button onclick="checkPassword()">Submit</button>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const pass = document.getElementById('password').value.trim().toLowerCase();
+            const status = document.getElementById('status');
+
+            if (pass === 'the other side of the door') {
+                status.style.color = 'lime';
+                status.textContent = '✔ Correct! Unlocking...';
+                // Here you can redirect or reveal content
+                // window.location.href = 'nextpage.html';
+            } else {
+                status.style.color = 'red';
+                status.textContent = '❌ Incorrect password.';
+            }
+        }
+    </script>
+
+</body>
+</html>
+```
+
+---
+
+If you want, I can now **add the same animated transition effect** from your first password page to this second one so when the correct password is entered, the door “unlocks” with an animation instead of just changing text. That would make it feel more seamless with your first page.  
+
+Do you want me to make that change?
