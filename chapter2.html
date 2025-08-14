@@ -80,6 +80,12 @@
            target="_blank" rel="noopener">
           Character creation (open in Canva)
         </a>
+        /* background swaps in after unlock */
+body.unlocked {
+  background: url('/cabin.jpg') center/cover no-repeat fixed;
+  transition: background 300ms ease-in; /* small fade-in */
+}
+
       </p>
     </div>
   </div>
@@ -101,6 +107,7 @@
 
         // Show content after animation
         setTimeout(() => {
+          document.body.classList.add('unlocked'); 
           content.classList.remove('hidden');
           content.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 2000);
