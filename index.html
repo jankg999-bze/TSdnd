@@ -111,7 +111,11 @@
     <p class="hint">enter the place holder passcode</p>
 
     <label for="password" class="sr-only" style="position:absolute;left:-9999px;">Password</label>
-    <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
+  <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
+<label style="margin-left:8px; font-size:0.95rem;">
+  <input id="showPw" type="checkbox"> Show password
+</label>
+
     <br />
     <button type="button" onclick="checkPassword()">Unlock</button>
     <p id="status" class="small" aria-live="polite"></p>
@@ -208,7 +212,6 @@
       }
     };
   </script>
-
 <script>
   const pw = document.getElementById('password');
   const show = document.getElementById('showPw');
@@ -218,6 +221,7 @@
     });
   }
 </script>
+
 
   
 </body>
