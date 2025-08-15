@@ -208,5 +208,17 @@
       }
     };
   </script>
+
+<script>
+  const pw = document.getElementById('password');
+  const show = document.getElementById('showPw');
+  if (pw && show) {
+    show.addEventListener('change', () => {
+      pw.type = show.checked ? 'text' : 'password';
+    });
+  }
+</script>
+
+  
 </body>
 </html>
